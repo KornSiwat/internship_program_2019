@@ -4,19 +4,17 @@
 
 ## Detail
 
-    **Hangman** 
+    Hangman
     
         contains Hangman game which is the first task
 
-    **Weather**
+    Weather
 
         contains a program which convert xml file to json file
 
 ## Contact
 
-    ## Contact
-
-    **Siwat Ponpued**
+    Siwat Ponpued
     Tel: 0615453292
     Line-id: k41763
     email: siwatponpued@gmail.com
