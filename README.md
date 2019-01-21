@@ -1,8 +1,8 @@
 # The Internship Program Developer Exam 2019
 
-    This repo is created to submit the internship program 2019 exam
+    This repository is created to submit the internship program 2019 exam
 
-## Detail
+## Details
 
     Hangman
     
