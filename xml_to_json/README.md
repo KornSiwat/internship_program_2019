@@ -26,20 +26,20 @@ Open the Terminal and type the following command:
 
     Open the Terminal and type the following command:
 
-        **On MacOS and Linux:**
+        On MacOS and Linux:
 
             python3 xml_to_json.py
 
-        **On Windows:**
+        On Windows:
 
             python xml_to_json.py
 
 ## Contact
 
-    **Siwat Ponpued**
-    Tel: 0615453292
-    Line-id: k41763
-    email: siwatponpued@gmail.com
+    Siwat Ponpued
+        Tel: 0615453292
+        Line-id: k41763
+        email: siwatponpued@gmail.com
 
     
 
