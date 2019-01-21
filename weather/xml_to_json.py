@@ -59,12 +59,15 @@ def return_attrib_text(node):
     return result
 
 def dict_to_json_file(xml_dict, out_name):
+    '''
+    this function convert a dictionary to json and write it out as a file with specified name
+    '''
     with open(f'{out_name}.json', 'w') as output:
         json.dump(xml_dict, output)
 
 def is_et_element(data):
     '''
-    function to check if type is xml.etree.ElementTree.Element
+    this function check if type is xml.etree.ElementTree.Element or not, which raise error if the type is not valid
     '''
     if isinstance(data , et.Element):
         return True
