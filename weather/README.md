@@ -20,7 +20,7 @@ Open the Terminal and type the following command:
 
 ### Step 1
 
-    Go to the program directory
+    Go to the program directory (weather folder)
 
 ### Step 2
 
