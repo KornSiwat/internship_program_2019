@@ -1,6 +1,6 @@
 # Hang Man Game
 
-    Hang Man is a word guess game written in python which allows user to choose category
+    Hang Man is a word guess game written in python which allows user to choose category of word and also provide a hang man graphic.
 
 ## Prerequisite
 
