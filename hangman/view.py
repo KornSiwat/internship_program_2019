@@ -5,6 +5,8 @@ def router(route):
     clear_screen()
     if route == 'main_menu':
         return main_menu()
+    elif route == 'start':
+        return category_menu()
 
 def clear_screen():
     try:
@@ -13,18 +15,23 @@ def clear_screen():
         system('cls')
 
 def print_choice(choice):
-    for no,choice in enumerate(choice,1):
-        print(f'{no}:{choice}')
+    for no,key in enumerate(choice,1):
+        print(f'{no}:{choice[key].title().replace("_"," ")}')
 
 def get_category_name():
-        path = 'words/'
-        name_list = listdir(path)
-        print(name_list)
+    path = 'words/'
+    name_list = listdir(path)
+    name_list.sort()
+    return name_list
 
 def main_menu():
     print(f"{'######### Hang Man #########':^30}")
-    choice = ['start', 'how to play', 'score_board']
-    print_choice(choice)
+    menu_choice = { 1:'start', 2:'how to play', 3:'score_board'}
+    print_choice(menu_choice)
+    return menu_choice
+
+def category_menu():
+    print(f"{'#### Choose Word Category ####':^30}")
 
 if __name__ == "__main__":
-    get_category_name()
+    print(get_category_name())
