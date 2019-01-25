@@ -1,19 +1,39 @@
+import random
 
-class ReadWordList():
+class ReadWordFile():
 
     def __init__(self,file_name):
         self.file_name = file_name
-        self.category_name = ''
-        self.word_list = []
 
-    # def read(self):
+    def read(self):
+        with open( self.file_name , 'r') as fin:
+            category_name = fin.readline()
+            fin = fin.readlines()
+        list_of_word = [x.strip().split(',') for x in fin if x != '']
+        return WordList(category_name,list_of_word)
 
+class WordList():
+
+    def __init__(self, name, list_of_word):
+        self.name = name
+        self.word_list = list_of_word
+
+    def generate_word(self):
+        result = random.choice(self.word_list)
+        self.word_list.remove(result)
+        return result
+
+    def won(self):
+        if self.word_list == []:
+            return True
+        else:
+            return False
 
 class Hangman():
 
     def __init__(self):
         self.detail = [] 
-        for i in range(10):
+        for i in range(9):
             self.detail.append([])
             for j in range(30):
                 self.detail[i].append(' ')
@@ -27,6 +47,8 @@ class Hangman():
             'left_leg': False,
             'right_leg': False
         }
+        
+        self.draw_top_edge()
 
     def __str__(self):
         for i in self.detail:
@@ -74,6 +96,11 @@ class Hangman():
             self.detail[i][j] = '#'
         self.status['right_leg'] = True
 
+    def draw_dead(self):
+        message = "You're Dead"
+        for i,char in zip(range(9,20),message):
+            self.detail[8][i] = char
+
     def draw_next(self):
         for key in self.status:
             if self.status[key] == False:
@@ -91,7 +118,7 @@ class Hangman():
                     self.draw_left_leg()
                 elif key == 'right_leg':
                     self.draw_right_leg()
-            return None
+                return None
 
     def remaining_life(self):
         total = len(self.status)
@@ -107,34 +134,19 @@ class Hangman():
 
     def is_dead(self):
         if self.remaining_life()[0] == 0:
+            self.draw_dead()
+            print(self)
             return True
         else:
             return False
 
+
 if __name__ == "__main__":
-    hangman = Hangman()
-    hangman.print_remaining_life()
-    hangman.draw_top_edge()
-    print(hangman)
-    hangman.print_remaining_life()
-    hangman.draw_rope()
-    print(hangman)
-    hangman.print_remaining_life()
-    hangman.draw_head()
-    print(hangman)
-    hangman.print_remaining_life()
-    hangman.draw_left_arm()
-    print(hangman)
-    hangman.print_remaining_life()
-    hangman.draw_right_arm()
-    print(hangman)
-    hangman.print_remaining_life()
-    hangman.draw_body()
-    print(hangman)
-    hangman.print_remaining_life()
-    hangman.draw_left_leg()
-    print(hangman)
-    hangman.print_remaining_life()
-    hangman.draw_right_leg()
-    print(hangman)
-    hangman.print_remaining_life()
+    # hangman = Hangman()
+    # while hangman.is_dead() != True:
+    #     hangman.draw_next()
+    #     print(hangman)
+    name = 'words/animal.txt'
+    read = ReadWordFile(name)
+    read.read()
+    print(read)
