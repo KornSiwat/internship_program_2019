@@ -1,17 +1,17 @@
 
-class ReadFile():
+class ReadWordList():
 
-    def __init__(self,file_name=''):
-        self.__file_name = file_name
+    def __init__(self,file_name):
+        self.file_name = file_name
+        self.category_name = ''
+        self.word_list = []
 
-# class WordList():
+    # def read(self):
 
-#     def
 
 class Hangman():
 
     def __init__(self):
-
         self.detail = [] 
         for i in range(10):
             self.detail.append([])
@@ -74,6 +74,25 @@ class Hangman():
             self.detail[i][j] = '#'
         self.status['right_leg'] = True
 
+    def draw_next(self):
+        for key in self.status:
+            if self.status[key] == False:
+                if key == 'rope':
+                    self.draw_rope()
+                elif key == 'head':
+                    self.draw_head()
+                elif key == 'left_arm':
+                    self.draw_left_arm()
+                elif key == 'right_arm':
+                    self.draw_right_arm()
+                elif key == 'body':
+                    self.draw_body()
+                elif key == 'left_leg':
+                    self.draw_left_leg()
+                elif key == 'right_leg':
+                    self.draw_right_leg()
+            return None
+
     def remaining_life(self):
         total = len(self.status)
         remain = 0
@@ -85,6 +104,12 @@ class Hangman():
     def print_remaining_life(self):
         data = self.remaining_life()
         print(f"Remaining lives {data[0]}/{data[1]}" )
+
+    def is_dead(self):
+        if self.remaining_life()[0] == 0:
+            return True
+        else:
+            return False
 
 if __name__ == "__main__":
     hangman = Hangman()

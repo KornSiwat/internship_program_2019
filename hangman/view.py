@@ -32,6 +32,7 @@ def main_menu():
 
 def category_menu():
     print(f"{'#### Choose Word Category ####':^30}")
+    
 
 if __name__ == "__main__":
     print(get_category_name())
