@@ -140,6 +140,19 @@ class Hangman():
         else:
             return False
 
+class ScoreBoard():
+
+    def __init__(self):
+        self.score = 0
+
+    def correct_char(self):
+        self.score += 1
+
+    def complete_word(self):
+        self.score += 10
+
+    def __str__(self):
+        return str(self.score)
 
 if __name__ == "__main__":
     # hangman = Hangman()
