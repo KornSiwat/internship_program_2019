@@ -1,9 +1,11 @@
 from model import ReadWordFile,Hangman,ScoreBoard
 from os import system,listdir
+import time
 
 def router(route):
     clear_screen()
     if route == 'main_menu':
+        intro()
         return main_menu()
     elif route == 'start':
         return category_menu()
@@ -14,17 +16,39 @@ def clear_screen():
     try:
         system('clear')
     except Exception:
-        system('cls')
+        try:
+            system('cls')
+        except Exception:
+            pass
 
 def print_choice(choice):
-    for no,key in enumerate(choice,1):
-        print(f'{no}) {choice[key].title().replace("_"," ")}')
+    for key in choice:
+        print(f'{key}) {choice[key].title().replace("_"," ")}')
 
 def get_category_name():
     path = 'words/'
-    name_list = listdir(path)
+    name_list = []
+    for file_name in listdir(path):
+        name_list.append(return_first_line(path+file_name))
     name_list.sort()
     return name_list
+
+def get_category_file_name():
+    path = 'words/'
+    name_list = listdir(path)
+    return name_list
+
+def return_first_line(file):
+    with open( file, 'r') as file_open:
+        return file_open.readline().strip()
+
+def intro():
+    intro_man = Hangman()
+    while intro_man.is_dead() != True:
+        intro_man.draw_next()
+        intro_man.print_hangman()
+        time.sleep(0.13)
+        clear_screen()
 
 def main_menu():
     print(f"{'######### Hang Man #########':^30}")
@@ -33,23 +57,27 @@ def main_menu():
     return menu_choice
 
 def category_menu():
+    path = 'words/'
     print(f"{'#### Choose Word Category ####':^30}")
     category_choice = dict()
     category_choice[0] = 0
-    category_list = get_category_name()
-    for no,name in enumerate(category_list):
-        category_choice[no] = name
-        print(f'{no}) {name}')
+    category_name_list = get_category_name()
+    category_file_name = get_category_file_name()
+    for no,name in enumerate(category_name_list,1):
+        print(f"{no}) {name}")
     print('0)Main Menu')
+    for no,name in enumerate(category_file_name,1):
+        category_choice[no] = name
     choice = int(input("Your Choice: "))
     while choice not in category_choice:
         print("Invaild Choice")
         choice = int(input("Your Choice: "))
     if choice == 0:
+        clear_screen()
         menu_choice = main_menu()
         return menu_choice
     else:
-        game_play(category_choice[choice])
+        game_play(path+category_choice[choice])
         menu_choice = main_menu()
         return menu_choice
 
@@ -70,6 +98,17 @@ def how_to_play():
 def game_play(category_name):
     file_read = ReadWordFile(category_name)
     word_list = file_read.read()
+    player = ScoreBoard()
+    hangman = Hangman()
+    while hangman.is_dead() != True:
+        if word_list.won == True:
+            break
+        current_word = word_list.generate_word()
+
+def word_guess(word):
+    word = list(word[0])
+    hint = word[1]
     
+
 if __name__ == "__main__":
     print(get_category_name())

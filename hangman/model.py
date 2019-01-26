@@ -29,6 +29,33 @@ class WordList():
         else:
             return False
 
+class WordGuess():
+
+    def __init__(self, word, hint):
+        self.word = list(word)
+        self.hint = hint
+        self.guess_box = []
+        for i in range(len(self.word)):
+            self.guess_box.append('_')
+        self.status = False
+
+    def guess(self,char):
+        for i in range(len(self.word)):
+            if self.word[i].lower() != char.lower():
+                continue
+            if self.guess_box[i] == '_':
+                self.guess_box[i] = self.word[i]
+                return True
+        else:
+            return False
+
+    def print_info(self):
+        print(f'Hint: {self.hint}')
+        print(f'Word: ', end='')
+        for char in self.guess_box:
+            print(f'{char} ', end='')
+        print('')
+
 class Hangman():
 
     def __init__(self):
@@ -50,12 +77,11 @@ class Hangman():
         
         self.draw_top_edge()
 
-    def __str__(self):
+    def print_hangman(self):
         for i in self.detail:
             for j in i:
                 print(j,end='')
             print('')
-        return ''
 
     def draw_top_edge(self):
         for i in range(len(self.detail[0])):
@@ -135,7 +161,7 @@ class Hangman():
     def is_dead(self):
         if self.remaining_life()[0] == 0:
             self.draw_dead()
-            print(self)
+            self.print_hangman()
             return True
         else:
             return False
