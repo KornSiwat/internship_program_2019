@@ -190,7 +190,7 @@ class ScoreFileRW():
 
     def write(self, score_obj):
         with open( self.file_name, 'a') as file:
-            file.write(f'\n{score_obj.name},{score_obj.score}')
+            file.write(f'{score_obj.name},{score_obj.score}\n')
 
 class ScoreBoard():
 

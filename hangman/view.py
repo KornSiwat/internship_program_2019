@@ -51,6 +51,7 @@ def intro():
         intro_man.print_hangman()
         time.sleep(0.08)
         clear_screen()
+    intro_man.print_hangman()
 
 def main_menu():
     print(f"{'######### Hang Man #########':^30}")
@@ -81,6 +82,7 @@ def category_menu():
     else:
         game_play(path+category_choice[choice])
         clear_screen()
+        intro()
         menu_choice = main_menu()
         return menu_choice
 
@@ -111,6 +113,9 @@ def game_play(category_name):
         print(player)
         current_word.print_info()
         player_guess = input('Input a Character: ')
+        while len(player_guess) != 1:
+            print("Input Error")
+            player_guess = input('Input a Character: ')
         result = current_word.guess(player_guess)
         if result == True:
             player.correct_guess()
