@@ -1,6 +1,7 @@
 from model import ReadWordFile,Hangman,ScoreBoard,ScoreFileRW
 from os import system,listdir
 import time
+import string
 
 def router(route):
     clear_screen()
@@ -113,7 +114,7 @@ def game_play(category_name):
         print(player)
         current_word.print_info()
         player_guess = input('Input a Character: ')
-        while len(player_guess) != 1:
+        while player_guess.lower() not in string.ascii_lowercase or player_guess == '':
             print("Input Error")
             player_guess = input('Input a Character: ')
         result = current_word.guess(player_guess)
@@ -122,7 +123,7 @@ def game_play(category_name):
             if current_word.complete() == True:
                 print("Word Completed")
                 print(current_word)
-                time.sleep(2)
+                time.sleep(1.8)
                 player.complete_word()
                 if word_list.won == True:
                     break
