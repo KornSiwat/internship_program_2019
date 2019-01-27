@@ -21,7 +21,7 @@ class WordList():
     def generate_word(self):
         result = random.choice(self.word_list)
         self.word_list.remove(result)
-        return result
+        return WordGuess(result[0],result[1])
 
     def won(self):
         if self.word_list == []:
@@ -36,7 +36,10 @@ class WordGuess():
         self.hint = hint
         self.guess_box = []
         for i in range(len(self.word)):
-            self.guess_box.append('_')
+            if self.word[i] == ' ':
+                self.guess_box.append(' ')
+            else:
+                self.guess_box.append('_')
         self.status = False
 
     def guess(self,char):
@@ -56,6 +59,15 @@ class WordGuess():
             print(f'{char} ', end='')
         print('')
 
+    def __str__(self):
+        return f'## {"".join(self.guess_box)}  ##'
+
+    def complete(self):
+        if self.guess_box == self.word:
+            return True
+        else:
+            return False
+
 class Hangman():
 
     def __init__(self):
@@ -64,7 +76,6 @@ class Hangman():
             self.detail.append([])
             for j in range(30):
                 self.detail[i].append(' ')
-
         self.status = { 
             'rope': False,
             'head': False,
@@ -74,7 +85,6 @@ class Hangman():
             'left_leg': False,
             'right_leg': False
         }
-        
         self.draw_top_edge()
 
     def print_hangman(self):
@@ -161,31 +171,41 @@ class Hangman():
     def is_dead(self):
         if self.remaining_life()[0] == 0:
             self.draw_dead()
-            self.print_hangman()
             return True
         else:
             return False
 
+class ScoreFileRW():
+
+    def __init__(self,name):
+        self.file_name = name
+
+    def read(self):
+        with open( self.file_name , 'r') as file:
+            file = file.readlines()
+            score_list = [x.strip().split(',') for x in file if x != '']
+        for elem in score_list:
+            elem[1] = int(elem[1])
+        return score_list
+
+    def write(self, score_obj):
+        with open( self.file_name, 'a') as file:
+            file.write(f'\n{score_obj.name},{score_obj.score}')
+
 class ScoreBoard():
 
     def __init__(self):
+        self.name = ''
         self.score = 0
 
-    def correct_char(self):
+    def set_name(self, name):
+        self.name = name
+
+    def correct_guess(self):
         self.score += 1
 
     def complete_word(self):
         self.score += 10
 
     def __str__(self):
-        return str(self.score)
-
-if __name__ == "__main__":
-    # hangman = Hangman()
-    # while hangman.is_dead() != True:
-    #     hangman.draw_next()
-    #     print(hangman)
-    name = 'words/animal.txt'
-    read = ReadWordFile(name)
-    read.read()
-    print(read)
+        return f'Current Score: {self.score}'

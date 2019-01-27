@@ -1,4 +1,4 @@
-from model import ReadWordFile,Hangman,ScoreBoard
+from model import ReadWordFile,Hangman,ScoreBoard,ScoreFileRW
 from os import system,listdir
 import time
 
@@ -11,6 +11,8 @@ def router(route):
         return category_menu()
     elif route == 'how to play':
         return how_to_play()
+    elif route == 'scoreboard':
+        return scoreboard_page()
 
 def clear_screen():
     try:
@@ -47,12 +49,12 @@ def intro():
     while intro_man.is_dead() != True:
         intro_man.draw_next()
         intro_man.print_hangman()
-        time.sleep(0.13)
+        time.sleep(0.08)
         clear_screen()
 
 def main_menu():
     print(f"{'######### Hang Man #########':^30}")
-    menu_choice = { 1:'start', 2:'how to play', 3:'score_board'}
+    menu_choice = { 1:'start', 2:'how to play', 3:'scoreboard'}
     print_choice(menu_choice)
     return menu_choice
 
@@ -78,19 +80,20 @@ def category_menu():
         return menu_choice
     else:
         game_play(path+category_choice[choice])
+        clear_screen()
         menu_choice = main_menu()
         return menu_choice
 
 def how_to_play():
     print(f"{'####### How to play #######':^30}")
-    print('     Step 1: Go to Start')
-    print('     Step 2: Choose a Word Category')
-    print('     Step 3: Guess a word from hint. [One Character for One Round.]')
+    print('    Step 1: Go to Start')
+    print('    Step 2: Choose a Word Category')
+    print('    Step 3: Guess a word from hint. [One Character for One Round.]')
     print('You Will Be Given 7 Life. If you are out of life, you will be hangged to dead, and the game will be over.')
     print('After the game is over, you can submit the score to scoreboard.')
     print('Scoring:')
-    print('     1 Point for each correct word guess')
-    print('     10 Point for completing a word')
+    print('    1 Point for each correct word guess')
+    print('    10 Point for completing a word')
     menu_choice = {0: 'main_menu'}
     print_choice(menu_choice)
     return menu_choice
@@ -100,15 +103,54 @@ def game_play(category_name):
     word_list = file_read.read()
     player = ScoreBoard()
     hangman = Hangman()
+    current_word = word_list.generate_word()
     while hangman.is_dead() != True:
-        if word_list.won == True:
-            break
-        current_word = word_list.generate_word()
-
-def word_guess(word):
-    word = list(word[0])
-    hint = word[1]
+        clear_screen()
+        hangman.print_hangman()
+        hangman.print_remaining_life()
+        print(player)
+        current_word.print_info()
+        player_guess = input('Input a Character: ')
+        result = current_word.guess(player_guess)
+        if result == True:
+            player.correct_guess()
+            if current_word.complete() == True:
+                print("Word Completed")
+                print(current_word)
+                time.sleep(2)
+                player.complete_word()
+                if word_list.won == True:
+                    break
+                current_word = word_list.generate_word()
+        else:
+            hangman.draw_next()
+    if word_list.won == True:
+        clear_screen()
+        'Out of words. You Win!!'
+    else:
+        clear_screen()
+        hangman.print_hangman()
+        'Game Over'
+    player.set_name(input("Your Name: "))
+    save_score = ScoreFileRW('score.txt')
+    save_score.write(player)
     
-
-if __name__ == "__main__":
-    print(get_category_name())
+def scoreboard_page():
+    print(f"{'##### ScoreBoard Top 10 #####':^30}")
+    score_read = ScoreFileRW('score.txt')
+    try:
+        score_list = score_read.read()
+        if len(score_list) == 0:
+            print("No Score")
+        else:
+            score_list.sort(key=lambda x: x[1], reverse=True)
+        for no,player_info in enumerate(score_list,1):
+            if no > 10:
+                break
+            else:
+                print(f'{no}) {player_info[0]} Score: {player_info[1]}')
+    except FileNotFoundError:
+        print("No Score")
+    menu_choice = {0: 'main_menu'}
+    print_choice(menu_choice)
+    return menu_choice
